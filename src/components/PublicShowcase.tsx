@@ -1,167 +1,121 @@
-import { motion } from 'framer-motion'
-import { Server, Radio, Mail, Boxes, CheckCircle2, Clock, Lock } from 'lucide-react'
+import { Server, Radio, Mail, Boxes, Gamepad2, Users, ExternalLink, CheckCircle2 } from 'lucide-react'
 import { SITE_CONFIG } from '../config'
 
 const projects = [
   {
+    icon: Gamepad2,
+    title: 'Debt Runners',
+    desc: 'A fast-paced game about escaping the debt cycle. Play it now.',
+    tags: ['Game', 'Web'],
+    status: 'live',
+    url: '#',
+  },
+  {
+    icon: Users,
+    title: 'CommunityOS',
+    desc: 'An open platform for building and managing communities online.',
+    tags: ['Community', 'Platform'],
+    status: 'live',
+    url: 'https://communityos.vercel.app',
+  },
+  {
     icon: Boxes,
     title: 'dApps Ecosystem',
-    desc: 'Custom decentralized applications built on Ethereum and EVM-compatible chains. Wallet-gated access for authorized users.',
-    tags: ['Ethereum', 'Web3', 'Solidity'],
+    desc: 'Decentralized apps built on Ethereum. Wallet-gated access.',
+    tags: ['Web3', 'Ethereum'],
     status: 'upcoming',
+    url: null,
   },
   {
     icon: Server,
     title: 'Home Server Node',
-    desc: 'Self-hosted Linux server running Docker containers — Nginx, databases, APIs — exposed safely via Cloudflare Tunnels.',
-    tags: ['Docker', 'Linux', 'Self-Hosted'],
+    desc: 'Self-hosted infrastructure running on Docker + Cloudflare Tunnels.',
+    tags: ['Docker', 'Self-Hosted'],
     status: 'upcoming',
+    url: null,
   },
   {
     icon: Mail,
     title: 'Decentralized Mail',
-    desc: 'XMTP + Mailchain wallet-native inbox. Receive and send messages natively to uncharteduser.brave from any wallet.',
-    tags: ['XMTP', 'Mailchain', 'Privacy'],
+    desc: 'XMTP + Mailchain inbox. Message me wallet-to-wallet.',
+    tags: ['XMTP', 'Privacy'],
     status: 'upcoming',
+    url: null,
   },
   {
     icon: Radio,
     title: 'Private Streaming',
-    desc: 'Jellyfin-powered self-hosted media server. Private, ad-free, and accessible only to authorized wallet holders.',
-    tags: ['Jellyfin', 'Media', 'Private'],
+    desc: 'Self-hosted Jellyfin media server for authorized wallets.',
+    tags: ['Jellyfin', 'Private'],
     status: 'upcoming',
+    url: null,
   },
 ]
-
-const statusIcon = {
-  done: <CheckCircle2 className="w-3 h-3 text-owner" />,
-  upcoming: <Clock className="w-3 h-3 text-white/30" />,
-}
-
-const container = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.1 } },
-}
-
-const item = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0 },
-}
 
 export default function PublicShowcase() {
   return (
     <>
-      {/* Projects Section */}
-      <section id="projects" className="py-24 px-6 max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-16"
-        >
-          <p className="font-mono text-xs text-accent mb-3">// what I'm building</p>
-          <h2 className="text-3xl md:text-4xl font-light text-white mb-4">Projects & Services</h2>
-          <p className="text-white/40 max-w-xl">
-            A growing ecosystem of self-hosted infrastructure, decentralized applications, and private digital services.
-          </p>
-        </motion.div>
+      {/* Projects */}
+      <section id="projects" className="py-20 px-6 max-w-5xl mx-auto">
+        <p className="text-xs text-white/30 font-mono mb-2">// projects</p>
+        <h2 className="text-2xl font-light text-white mb-10">What I'm Building</h2>
 
-        <motion.div
-          variants={container}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-4"
-        >
-          {projects.map((project) => {
-            const Icon = project.icon
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {projects.map((p) => {
+            const Icon = p.icon
             return (
-              <motion.div
-                key={project.title}
-                variants={item}
-                whileHover={{ y: -2 }}
-                className="group relative p-6 rounded-2xl border border-white/5 bg-base-900/50 backdrop-blur-sm hover:border-white/10 transition-all duration-300"
+              <div
+                key={p.title}
+                className="p-5 rounded-xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] transition-colors"
               >
-                {/* Hover glow */}
-                <div className="absolute inset-0 rounded-2xl bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-
-                <div className="relative z-10">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="w-10 h-10 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center">
-                      <Icon className="w-5 h-5 text-accent" />
-                    </div>
-                    <div className="flex items-center gap-1.5 px-2 py-1 rounded-full border border-white/10 bg-base-800/50">
-                      {statusIcon[project.status as keyof typeof statusIcon]}
-                      <span className="text-xs font-mono text-white/30 capitalize">{project.status}</span>
-                    </div>
-                  </div>
-
-                  <h3 className="text-white font-medium mb-2">{project.title}</h3>
-                  <p className="text-white/40 text-sm leading-relaxed mb-4">{project.desc}</p>
-
-                  <div className="flex flex-wrap gap-2">
-                    {project.tags.map((tag) => (
-                      <span key={tag} className="px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-xs text-white/40 font-mono">
-                        {tag}
-                      </span>
+                <div className="flex items-center justify-between mb-3">
+                  <Icon className="w-4 h-4 text-white/40" />
+                  <span className={`text-xs font-mono ${p.status === 'live' ? 'text-owner' : 'text-white/20'}`}>
+                    {p.status === 'live' ? '● live' : '○ soon'}
+                  </span>
+                </div>
+                <h3 className="text-sm font-medium text-white mb-1">{p.title}</h3>
+                <p className="text-xs text-white/30 leading-relaxed mb-3">{p.desc}</p>
+                <div className="flex items-center justify-between">
+                  <div className="flex gap-1.5">
+                    {p.tags.map((t) => (
+                      <span key={t} className="text-xs text-white/20 font-mono">{t}</span>
                     ))}
                   </div>
-                </div>
-              </motion.div>
-            )
-          })}
-        </motion.div>
-      </section>
-
-      {/* Roadmap Section */}
-      <section id="roadmap" className="py-24 px-6 max-w-4xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-16"
-        >
-          <p className="font-mono text-xs text-accent mb-3">// the journey</p>
-          <h2 className="text-3xl md:text-4xl font-light text-white mb-4">Roadmap</h2>
-        </motion.div>
-
-        <div className="relative">
-          <div className="absolute left-4 top-0 bottom-0 w-px bg-gradient-to-b from-accent/30 via-white/10 to-transparent" />
-
-          {SITE_CONFIG.roadmap.map((node, i) => (
-            <motion.div
-              key={node.id}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="relative flex gap-6 pb-10 last:pb-0"
-            >
-              <div className={`relative z-10 w-8 h-8 rounded-full border flex items-center justify-center flex-shrink-0 ${
-                node.status === 'done'
-                  ? 'border-owner/50 bg-owner/10'
-                  : 'border-white/20 bg-base-800'
-              }`}>
-                {node.status === 'done'
-                  ? <CheckCircle2 className="w-4 h-4 text-owner" />
-                  : <Lock className="w-3 h-3 text-white/30" />
-                }
-              </div>
-
-              <div className="pt-0.5">
-                <div className="flex items-center gap-2 mb-1">
-                  <h3 className={`font-medium ${node.status === 'done' ? 'text-white' : 'text-white/60'}`}>
-                    {node.label}
-                  </h3>
-                  {node.status === 'done' && (
-                    <span className="px-2 py-0.5 rounded-full text-xs font-mono bg-owner/10 border border-owner/30 text-owner">
-                      Live
-                    </span>
+                  {p.url && (
+                    <a href={p.url} target="_blank" rel="noopener noreferrer">
+                      <ExternalLink className="w-3 h-3 text-white/20 hover:text-white/60 transition-colors" />
+                    </a>
                   )}
                 </div>
-                <p className="text-sm text-white/30">{node.desc}</p>
               </div>
-            </motion.div>
+            )
+          })}
+        </div>
+      </section>
+
+      {/* Roadmap */}
+      <section id="roadmap" className="py-20 px-6 max-w-5xl mx-auto">
+        <p className="text-xs text-white/30 font-mono mb-2">// roadmap</p>
+        <h2 className="text-2xl font-light text-white mb-10">The Journey</h2>
+
+        <div className="space-y-0">
+          {SITE_CONFIG.roadmap.map((node, i) => (
+            <div key={node.id} className="flex gap-5 pb-8 last:pb-0">
+              <div className="flex flex-col items-center">
+                <div className={`w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${node.status === 'done' ? 'bg-owner' : 'bg-white/10'}`} />
+                {i < SITE_CONFIG.roadmap.length - 1 && (
+                  <div className="w-px flex-1 mt-2 bg-white/5" />
+                )}
+              </div>
+              <div className="pb-1">
+                <div className="flex items-center gap-2 mb-0.5">
+                  <span className={`text-sm ${node.status === 'done' ? 'text-white' : 'text-white/40'}`}>{node.label}</span>
+                  {node.status === 'done' && <CheckCircle2 className="w-3 h-3 text-owner" />}
+                </div>
+                <p className="text-xs text-white/25 leading-relaxed">{node.desc}</p>
+              </div>
+            </div>
           ))}
         </div>
       </section>
