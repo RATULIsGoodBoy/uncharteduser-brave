@@ -8,7 +8,7 @@ const projects = [
     desc: 'A fast-paced game about escaping the debt cycle. Play it now.',
     tags: ['Game', 'Web'],
     status: 'live',
-    url: '#',
+    url: 'https://debt-runners-2026-abc.web.app/',
   },
   {
     icon: Users,
@@ -16,7 +16,7 @@ const projects = [
     desc: 'An open platform for building and managing communities online.',
     tags: ['Community', 'Platform'],
     status: 'live',
-    url: 'https://communityos.vercel.app',
+    url: 'https://comunityos.vercel.app/',
   },
   {
     icon: Boxes,
