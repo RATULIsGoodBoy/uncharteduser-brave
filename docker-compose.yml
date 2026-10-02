@@ -1,0 +1,111 @@
+# uncharteduser.brave — Home Server Docker Compose Blueprint
+# Run with: docker compose up -d
+# See HOMESERVER_BLUEPRINT.md for full setup instructions.
+
+version: '3.9'
+
+networks:
+  unchartednet:
+    driver: bridge
+
+services:
+  # ===========================
+  # 1. NGINX — Web Server / Reverse Proxy
+  # ===========================
+  nginx:
+    image: nginx:alpine
+    container_name: uncharteduser_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./dist:/usr/share/nginx/html:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - nginx_logs:/var/log/nginx
+    networks:
+      - unchartednet
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+
+  # ===========================
+  # 2. CLOUDFLARE TUNNEL — Zero Port Forwarding Public Access
+  # ===========================
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: uncharteduser_tunnel
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    networks:
+      - unchartednet
+    depends_on:
+      - nginx
+
+  # ===========================
+  # 3. JELLYFIN — Private Media Streaming Server
+  # ===========================
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: uncharteduser_jellyfin
+    restart: unless-stopped
+    environment:
+      - JELLYFIN_PublishedServerUrl=https://stream.uncharteduser.brave
+    volumes:
+      - jellyfin_config:/config
+      - jellyfin_cache:/cache
+      - ${MEDIA_PATH:-./media}:/media:ro
+    networks:
+      - unchartednet
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+
+  # ===========================
+  # 4. UPTIME KUMA — Self-Hosted Monitoring
+  # ===========================
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    container_name: uncharteduser_uptime
+    restart: unless-stopped
+    volumes:
+      - uptime_data:/app/data
+    networks:
+      - unchartednet
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+  # ===========================
+  # 5. PORTAINER — Docker Web UI
+  # ===========================
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: uncharteduser_portainer
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    networks:
+      - unchartednet
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+volumes:
+  nginx_logs:
+  jellyfin_config:
+  jellyfin_cache:
+  uptime_data:
+  portainer_data:
