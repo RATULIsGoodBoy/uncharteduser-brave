@@ -60,9 +60,9 @@ export default function Hero({ onConnect }: HeroProps) {
           {isOwner && (
             <a
               href="#dashboard"
-              className="flex items-center gap-2 px-5 py-2.5 rounded-lg border border-owner/20 text-owner text-sm hover:bg-owner/5 transition-colors"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-lg border border-owner/30 bg-owner/10 text-owner text-sm hover:bg-owner/20 transition-colors"
             >
-              <Globe className="w-3.5 h-3.5" /> Dashboard
+              <Globe className="w-3.5 h-3.5" /> Enter My Space
             </a>
           )}
         </div>

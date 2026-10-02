@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Server, Radio, Boxes, Mail, Inbox, Cpu, HardDrive,
-  Wifi, Trash2, Shield, Lock, RefreshCw, ExternalLink, Activity
+  Wifi, Trash2, Shield, Lock, RefreshCw, ExternalLink, Activity, LayoutGrid
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
+import ModularSpace from './ModularSpace'
 
 const STORAGE_KEY = 'uncharteduser_inbox'
 
@@ -52,11 +53,11 @@ const dapps = [
   { name: 'Streaming Node', icon: Radio, desc: 'Control your Jellyfin media server.', color: 'accent' },
 ]
 
-type Tab = 'overview' | 'dapps' | 'inbox' | 'server'
+type Tab = 'myspace' | 'overview' | 'dapps' | 'inbox' | 'server'
 
 export default function OwnerDashboard() {
   const { isOwner, authState } = useAuth()
-  const [tab, setTab] = useState<Tab>('overview')
+  const [tab, setTab] = useState<Tab>('myspace')
   const [messages, setMessages] = useState<Message[]>(loadMessages())
   const metrics = useMockTelemetry()
 
@@ -82,10 +83,11 @@ export default function OwnerDashboard() {
   }
 
   const tabs: { id: Tab; label: string; icon: React.ElementType }[] = [
+    { id: 'myspace', label: 'My Space (Modular Hub)', icon: LayoutGrid },
     { id: 'overview', label: 'Overview', icon: Activity },
     { id: 'dapps', label: 'dApps', icon: Boxes },
     { id: 'inbox', label: `Inbox (${messages.length})`, icon: Inbox },
-    { id: 'server', label: 'Server', icon: Server },
+    { id: 'server', label: 'Server & Telemetry', icon: Server },
   ]
 
   return (
@@ -127,6 +129,13 @@ export default function OwnerDashboard() {
       </div>
 
       <AnimatePresence mode="wait">
+        {/* MY SPACE MODULAR HUB TAB */}
+        {tab === 'myspace' && (
+          <motion.div key="myspace" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <ModularSpace />
+          </motion.div>
+        )}
+
         {/* OVERVIEW TAB */}
         {tab === 'overview' && (
           <motion.div key="overview" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>

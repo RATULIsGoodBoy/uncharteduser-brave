@@ -25,6 +25,11 @@ export default function Navbar({ onOpenPin }: NavbarProps) {
         {['projects', 'roadmap', 'contact'].map((l) => (
           <a key={l} href={`#${l}`} className="hover:text-white/70 transition-colors capitalize">{l}</a>
         ))}
+        {(authState === 'owner' || authState === 'pinauth') && (
+          <a href="#dashboard" className="text-owner font-mono hover:underline flex items-center gap-1">
+            ● My Space
+          </a>
+        )}
       </div>
 
       {/* Auth */}
